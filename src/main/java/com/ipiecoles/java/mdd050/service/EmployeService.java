@@ -23,7 +23,10 @@ public class EmployeService {
     @Autowired
     private EmployeRepository employeRepository;
 
-    public Employe findById(Long id){
+    public Employe findById(Long id) throws  EntityNotFoundException {
+        if (employeRepository.findOne(id) == null){
+            throw new EntityNotFoundException("employe not found");
+        }
         return employeRepository.findOne(id);
     }
 
@@ -60,8 +63,13 @@ public class EmployeService {
         return employeRepository.findAll(pageable);
     }
 
-    public Employe findMyMatricule(String matricule) {
-       return this.employeRepository.findByMatricule(matricule);
+    public Employe findMyMatricule(String matricule) throws EntityNotFoundException{
+
+        System.out.println(this.employeRepository.findByMatricule(matricule));
+        if (this.employeRepository.findByMatricule(matricule) == null) {
+            throw new EntityNotFoundException("entity not found");
+        }
+        return this.employeRepository.findByMatricule(matricule);
     }
 
 }
